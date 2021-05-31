@@ -1,0 +1,46 @@
+import os, json
+import pandas as pd
+
+path_to_json = '/'
+json_files = [pos_json for pos_json in os.listdir(path_to_json) if pos_json.endswith('.json')]
+
+jsons_data = pd.DataFrame(columns=['number','patientID','doctorId','m','feiye','xingtai','bianyuan','fenye','feiyefeiduan','xingzhi'])
+
+jsons_data
+
+
+json_files
+
+import csv
+
+for index, js in enumerate(json_files):
+    with open(os.path.join(path_to_json, js)) as json_file:
+        json_text = json.load(json_file)
+        k=0
+        m=0
+        for k in range (0,105):
+            number=k
+            patientID = json_text[k]['patientID']
+            doctorId=json_text[k]['other_info']['doctorId']
+            slice_thickness = json_text[k]['slice_thickness'] #层厚
+            for m in range(0,len(json_text[k]['nodes'])):
+                m=m
+                feiye=json_text[k]['nodes'][m]['descText'][1][0][0]['select']
+                xingtai =json_text[k]['nodes'][m]['descText'][2][0][0]['select']
+                bianyuan =json_text[k]['nodes'][m]['descText'][3][0][0]['select']
+                fenye =json_text[k]['nodes'][m]['descText'][4][0][0]['select']
+                feiyefeiduan =json_text[k]['nodes'][m]['descText'][5][0][0]['select']
+                xingzhi =json_text[k]['nodes'][m]['descText'][6][0][0]['select']
+                
+                jsons_data.loc[index] = [number,patientID,doctorId,m,feiye,xingtai,bianyuan,fenye,feiyefeiduan,xingzhi]
+                for m in range(0,len(json_text[k]['nodes'])):
+                    jsons_data.to_csv('/Users/momozi1996/Desktop/moyan_workingRecord/2021年/5月/内蒙林业/result.csv',index=True,sep=',',mode='a')
+                    print(jsons_data)
+                m=m+1  
+        k=k+1 
+        
+        
+        
+        
+read_csv = pd.read_csv("/result.csv")
+print(read_csv)
